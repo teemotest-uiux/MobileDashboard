@@ -52,6 +52,8 @@ The PG Dataset contains multiple student information with the following columns:
 - degree_type_enrol: The degree the student is enrolled in (e.g., MbC, PhD, MbR).
 - cdbcourse_finance_type_enrol: The type of financing for the student's course (e.g., SELF-FINANCING, SUBSIDISED).
 - current_student_status: DO is Dropout, CF is Graduated, AC is Active.
+
+you are to help with data retrieval.
 """
 
 # Sidebar for API key and file upload
