@@ -45,15 +45,41 @@ st.title(":school: School Management Dashboard")
 
 # Data description for better query
 data_description = """
-Check the dataset if it's PG or UG PG for postgraduates and UG for undergraduates
-The PG Dataset contains multiple student information with the following columns:
-- age: The student's age.
-- gender: The gender of the student (M/F).
-- degree_type_enrol: The degree the student is enrolled in (e.g., MbC, PhD, MbR).
-- cdbcourse_finance_type_enrol: The type of financing for the student's course (e.g., SELF-FINANCING, SUBSIDISED).
-- current_student_status: DO is Dropout, CF is Graduated, AC is Active.
+Check the dataset if it's PG or UG, PG for postgraduates and UG for undergraduates
+First check the first row of the dataset to determine if it's PG or UG data.
 
-you are to help with data retrieval.
+The PG Dataset contains multiple student information with the following columns:
+- hash_id: the hashed identity number of a student.
+- admission_yr: the year that the student was admitted to school.
+- gender: the student’s gender, F for female M for Male.
+- nationality_group: the student’s nationalities where SC is Singaporean student, IS is international student and PR is a permanent Resident of Singapore student.
+- pg_prog_type_enrol: the course the student was pursuing when he was admitted, C for Coursework, R for Research.
+- degree_type_enrol: the type of degree he is pursing when he was admitted, PhD for doctoral degrees, MbC for MbC, MbR for Mbr.
+- cdbcourse_finance_type_enrol: Whether the student was SUBSIDISED or SELF-FINANCING when paying his/her school fees.
+- cdbcourse_term_per_yr_enrol: how many terms are there per year. 2 for 2 semesters in a year, 3 for 3 semesters in a year.
+- pg_fullpart_enrol: FT is full time student, PT is part time student. 
+- pg_rs_start_dt: the date and time of the start of their studies.
+- candidature_end_dt: the estimated date and time of their end of studies.
+- pg_min_candidature_dt: the minimum date and time they would need to graduate.
+- current_student_status: CF meaning the student have graduated, DO meaning the student have dropped out, AC meaning the student is still actively studying.
+- pg_course_code: The Program that the student is pursuing.
+- school_name_short: the school name in the university.
+- degree code: the code for the student's degree.
+
+The UG Dataset contains multiple student information with the following columns:
+- admission: The year the student was admitted into the school.
+- gender: the gender of the student (M/F)
+- nationality: SC is Singapore citizen, IS is International student, SPR is Singapore permanent resident.
+- ug_student_type: FT is Full time, PT is Part time.
+- ug_total_candidature: is the amount of candidature time the student took.
+- ug_normal_candidature: is the normal amount of candidature time for that course
+- drop_out_dt: the drop-out date and time for that student, Null would mean that the student did not drop out.
+- gr_graduated_yr: the year the student graduated, Null would mean the student is still actively studying or have dropped out of school
+- current_student_status: DO is Dropout, CF is Graduated, AC is Active.
+- ug_course_code: the program the student is studying in.
+- school_name_short: the school that the student is in.
+
+you are to help with data retrieval and data analytics, you do not need to answer if it's a UG or PG dataset, You are expected to give a value if it is a calculation question. 
 """
 
 # Sidebar for API key and file upload
@@ -87,14 +113,12 @@ with st.sidebar:
     if "messages" not in st.session_state:
         st.session_state.messages = []          
 
-# Create two columns for layout: left for filters and data upload, right for data preview and charts
-col1, col2 = st.columns([2, 3])  # Adjust the column width ratio to make the left column bigger
 
-# Left column: Filter and student data upload section
+col1, col2 = st.columns([2, 3]) 
+
 with col1:
     # File Upload Section
     file = st.file_uploader("Upload Student Data", type=["csv", "xlsx"])
-
     # After file is uploaded, display filters and data processing
     if file:
         # Read file after upload
@@ -122,15 +146,15 @@ with col1:
             if dataset_type == "PG":
                 selected_degree = st.selectbox("Select Degree Type", ["All", "MbC", "PhD", "MbR"])
             else:
-                selected_degree = "All"  # UG doesn't need degree type filtering, so default to "All"
+                selected_degree = "All"  
             
             selected_gender = st.selectbox("Select Gender", ["All", "M", "F"])
             
-            # Display finance type dropdown if dataset is PG
+           
             if dataset_type == "PG":
                 selected_Finance = st.selectbox("Select Finance Type", ["All", "SELF-FINANCING", "SUBSIDISED"])
             else:
-                selected_Finance = "All"  # Default value if it's UG data
+                selected_Finance = "All"  
 
             # Apply filters to dataframe
             if selected_degree != "All":
@@ -156,7 +180,7 @@ with col2:
 
         # Plotting charts based on dataset type
         if dataset_type == "PG":
-            fig, axs = plt.subplots(1, 3, figsize=(18, 5))  # 3 columns for PG charts
+            fig, axs = plt.subplots(1, 3, figsize=(18, 5))  
             sns.countplot(data=df, x="gender", ax=axs[0])
             axs[0].set_title("Gender Distribution (PG)")
 
@@ -168,7 +192,7 @@ with col2:
             st.pyplot(fig)
 
         elif dataset_type == "UG":
-            fig, axs = plt.subplots(1, 3, figsize=(18, 5))  # 3 columns for UG charts
+            fig, axs = plt.subplots(1, 3, figsize=(18, 5))  
             sns.countplot(data=df, x="gender", ax=axs[0])
             axs[0].set_title("Gender Distribution (UG)")
 
@@ -186,12 +210,11 @@ if "openai_api_key" in st.session_state and file is not None:
         llm, df, verbose=True, agent_type=AgentType.OPENAI_FUNCTIONS, allow_dangerous_code=True
     )
     
-    # Set up callback handler for better tracking
+    # Callback handler for better tracking
     callback_handler = StdOutCallbackHandler()
     
-    # Modify agent execution to include tracing
     if submit_button and input_text:
-        enhanced_input = data_description + " " + input_text + " Can you explain your reasoning step by step?"
+        enhanced_input = data_description + " " + input_text + """Please reason through the problem step by step., if there's missing data reuse the original dataset and estimate with other data in the dataset"""
         logging.info(f"Sending query to AI: {enhanced_input}")
         result = agent.invoke(enhanced_input)
     
