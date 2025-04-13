@@ -79,7 +79,7 @@ The UG Dataset contains multiple student information with the following columns:
 - ug_course_code: the program the student is studying in.
 - school_name_short: the school that the student is in.
 
-you are to help with data retrieval and data analytics, you do not need to answer if it's a UG or PG dataset, You are expected to give a value if it is a calculation question.
+you are to help with data retrieval and data analytics, you do not need to answer if it's a UG or PG dataset, You are expected to give a value if it is a calculation question. If the condition is fully missing information without a single value try other possible conditions to get a result.
 """
 
 # Sidebar for API key and file upload
@@ -214,7 +214,7 @@ if "openai_api_key" in st.session_state and file is not None:
     callback_handler = StdOutCallbackHandler()
     
     if submit_button and input_text:
-        enhanced_input = data_description + " " + input_text + """Please reason through the problem step by step., if there's missing data reuse the original dataset and estimate with other data in the dataset"""
+        enhanced_input = data_description + " " + input_text + """ Please reason through the problem step by step., if there's missing data reuse the original dataset and estimate with other data in the dataset"""
         logging.info(f"Sending query to AI: {enhanced_input}")
         result = agent.invoke(enhanced_input)
     
