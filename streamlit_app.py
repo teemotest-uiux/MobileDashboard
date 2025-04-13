@@ -45,7 +45,7 @@ st.title(":school: School Management Dashboard")
 
 # Data description for better query
 data_description = """
-Check the dataset if it's PG or UG, PG for postgraduates and UG for undergraduates only one dataset is used each time.
+Check the dataset if it's PG or UG, PG for postgraduates and UG for undergraduates. There is no combined dataset of PG and UG
 First check the first row of the dataset to determine if it's PG or UG data.
 
 The PG Dataset contains multiple student information with the following columns:
