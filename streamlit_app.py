@@ -79,7 +79,7 @@ The UG Dataset contains multiple student information with the following columns:
 - ug_course_code: the program the student is studying in.
 - school_name_short: the school that the student is in.
 
-you are to help with data retrieval and data analytics, you do not need to answer if it's a UG or PG dataset, You are expected to give a value if it is a calculation question. If the condition is fully missing information without a single value try multiple possible conditions to get a result.
+you are to help with data retrieval and data analytics, you do not need to answer if it's a UG or PG dataset, You are expected to give a value if it is a calculation question. Only If the condition is fully missing information without a single value try multiple possible conditions to get a result however if there's a result you do not need to do multiple possible conditions.
 """
 
 # Sidebar for API key and file upload
