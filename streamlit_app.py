@@ -61,7 +61,7 @@ The PG Dataset contains multiple student information with the following columns:
 - pg_rs_start_dt: the date and time of the start of their studies.
 - candidature_end_dt: the estimated date and time of their end of studies.
 - pg_min_candidature_dt: the minimum date and time they would need to graduate.
-- current_student_status: CF meaning the student have graduated, DO meaning the student have dropped out, AC meaning the student is still actively studying.
+- current_student_status: DO is Dropout, CF is Graduated, AC is Active.
 - pg_course_code: The Program that the student is pursuing.
 - school_name_short: the school name in the university.
 - degree code: the code for the student's degree.
